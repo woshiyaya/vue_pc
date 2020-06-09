@@ -2,11 +2,11 @@
   <div class="container-login">
       <el-card>
           <img src="../../assets/logo_index.png" alt="">
-          <el-form :model="loginForm">
-              <el-form-item>
+          <el-form :model="loginForm" :rules="rulesForm" status-icon>
+              <el-form-item prop="mobile">
                   <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
               </el-form-item>
-              <el-form-item>
+              <el-form-item prop="code">
                   <el-input v-model="loginForm.code" placeholder="请输入验证码" style="width:240px;margin-right:8px"></el-input>
                   <el-button>发送验证码</el-button>
               </el-form-item>
@@ -25,10 +25,27 @@
 export default {
   name: 'app-login',
   data () {
+    const checkMobile = (rule, value, callback) => {
+      if (!/^1[3-9]\d{9}$/.test(value)) {
+        callback(new Error('手机号错误'))
+      } else {
+        callback()
+      }
+    }
     return {
       loginForm: {
         mobile: '',
         code: ''
+      },
+      rulesForm: {
+        mobile: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { validator: checkMobile, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { len: 4, message: '验证码6个字符', trigger: 'blur' }
+        ]
       },
       checked: true
     }
