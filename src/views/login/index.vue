@@ -2,7 +2,7 @@
   <div class="container-login">
       <el-card>
           <img src="../../assets/logo_index.png" alt="">
-          <el-form :model="loginForm" :rules="rulesForm" status-icon>
+          <el-form ref="loginRef" :model="loginForm" :rules="rulesForm" status-icon>
               <el-form-item prop="mobile">
                   <el-input v-model="loginForm.mobile" placeholder="请输入手机号"></el-input>
               </el-form-item>
@@ -14,7 +14,7 @@
                   <el-checkbox v-model="checked">我已阅读并同意该条款</el-checkbox>
               </el-form-item>
               <el-form-item>
-                  <el-button type="primary" style="width:100%">登录</el-button>
+                  <el-button @click="login()" type="primary" style="width:100%">登录</el-button>
               </el-form-item>
           </el-form>
       </el-card>
@@ -48,6 +48,15 @@ export default {
         ]
       },
       checked: true
+    }
+  },
+  methods: {
+    login () {
+      this.$refs.loginRef.validate(valid => {
+        if (valid) {
+          // 进行跳转
+        }
+      })
     }
   }
 }
