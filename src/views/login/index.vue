@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import auth from '../../utils/auth'
 export default {
   name: 'app-login',
   data () {
@@ -34,8 +35,8 @@ export default {
     }
     return {
       loginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       rulesForm: {
         mobile: [
@@ -44,7 +45,7 @@ export default {
         ],
         code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
-          { len: 4, message: '验证码6个字符', trigger: 'blur' }
+          { len: 6, message: '验证码6个字符', trigger: 'blur' }
         ]
       },
       checked: true
@@ -55,6 +56,15 @@ export default {
       this.$refs.loginRef.validate(valid => {
         if (valid) {
           // 进行跳转
+          this.$http.post(
+            'http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm
+          ).then(res => {
+            // 存储用户信息
+            auth.setUser(res.data.data)
+            this.$router.push('/')
+          }).catch(() => {
+            this.$message.error('手机号或验证码错误')
+          })
         }
       })
     }
