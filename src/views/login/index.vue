@@ -53,18 +53,30 @@ export default {
   },
   methods: {
     login () {
-      this.$refs.loginRef.validate(valid => {
+      this.$refs.loginRef.validate(async valid => {
         if (valid) {
           // 进行跳转
-          this.$http.post(
-            'http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.loginForm
-          ).then(res => {
-            // 存储用户信息
+          // this.$http.post(
+          //   'authorizations', this.loginForm
+          // ).then(res => {
+          //   // 存储用户信息
+          //   auth.setUser(res.data.data)
+          //   this.$router.push('/')
+          // }).catch(() => {
+          //   this.$message.error('手机号或验证码错误')
+          // })
+          // 使用async，await,正常情况，await获取的就是promise中then中的数据
+          // 捕获异常，使用try catch
+          try {
+            // 1.发请求捕获数据
+            const res = await this.$http.post('authorizations', this.loginForm)
+            // 2.存储用户信息
             auth.setUser(res.data.data)
+            // 3.跳转到首页
             this.$router.push('/')
-          }).catch(() => {
+          } catch (e) {
             this.$message.error('手机号或验证码错误')
-          })
+          }
         }
       })
     }
